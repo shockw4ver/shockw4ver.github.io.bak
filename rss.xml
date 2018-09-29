@@ -1,4 +1,235 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[The Minimum Town]]></title><description><![CDATA[Blog of Zhang Yongchao]]></description><link>http://www.samuel-zhang.com</link><generator>RSS for Node</generator><lastBuildDate>Sat, 29 Sep 2018 06:45:00 GMT</lastBuildDate><item><title><![CDATA[译：在 Angular 中使用 Redux 来管理用户界面]]></title><description><![CDATA[在此感谢 Hristo Georgiev 先生的原文许可 PS：原文链接已失效，顾不再贴出 ​ 尽管各种用于构建 web 界面的先进技术在过去几年相继出现，但 DOM 和应用 UI 的管理仍然在很大程度上依赖 jQuery——一个已经有历尽 1…]]></description><link>http://www.samuel-zhang.com/Angular-Redux/</link><guid isPermaLink="false">http://www.samuel-zhang.com/Angular-Redux/</guid><pubDate>Fri, 01 May 2015 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;在此感谢 Hristo Georgiev 先生的原文许可&lt;/strong&gt;&lt;br&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[The Minimum Town]]></title><description><![CDATA[Blog of Zhang Yongchao]]></description><link>http://www.samuel-zhang.com</link><generator>RSS for Node</generator><lastBuildDate>Sat, 29 Sep 2018 10:24:56 GMT</lastBuildDate><item><title><![CDATA[Go 语言函数众生相]]></title><description><![CDATA[本文是对匿名函数、高阶函数、闭包、同步、延时（defer）及其他 Go 函数类型或特性的概览。 这篇文章是针对 Go…]]></description><link>http://www.samuel-zhang.com/Go-Function/</link><guid isPermaLink="false">http://www.samuel-zhang.com/Go-Function/</guid><pubDate>Sat, 29 Sep 2018 08:57:22 GMT</pubDate><content:encoded>&lt;h3&gt;本文是对匿名函数、高阶函数、闭包、同步、延时（defer）及其他 Go 函数类型或特性的概览。&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/The_zoo_of_go_funcs.png&quot; alt=&quot;The Zoo of Go Funcs&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;这篇文章是针对 Go 语言中不同的函数类型或特性的摘要总结。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;更为深入的探讨我会在近期的文章中进行，因为那需要更多的篇幅。这只是一个开端。&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;命名函数&lt;/h2&gt;
+&lt;p&gt;一个命名函数拥有一个函数名，并且要声明在包级作用域中——&lt;em&gt;其他函数的外部&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;👉&lt;/em&gt; &lt;strong&gt;&lt;em&gt;我已经在&lt;a href=&quot;https://blog.learngoprogramming.com/golang-funcs-params-named-result-values-types-pass-by-value-67f4374d9c0a&quot;&gt;另一篇文章&lt;/a&gt;中对它们进行了完整的介绍&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/named_funcs.png&quot; alt=&quot;named Func&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;这是一个命名函数：Len 函数接受一个 string 类型的参数并返回一个 int 类型的值&lt;/p&gt;
+&lt;h2&gt;可变参数函数&lt;/h2&gt;
+&lt;p&gt;变参函数可接受任意数量的参数&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;👉&lt;/em&gt; &lt;strong&gt;&lt;em&gt;我已经在&lt;a href=&quot;https://blog.learngoprogramming.com/golang-variadic-funcs-how-to-patterns-369408f19085&quot;&gt;另一篇文章&lt;/a&gt;中对它们进行了完整的介绍&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/variadic_funcs.png&quot; alt=&quot;Variadic Funcs&quot;&gt;&lt;/p&gt;
+&lt;h2&gt;方法&lt;/h2&gt;
+&lt;p&gt;当你将一个函数附加到某个类型时，这个函数就成为了该类型上的一个方法。因此，它可以通过这个类型来调用。在通过类型来调用其上的某个方法时，Go 语言会将该类型（接收者）传递给方法。&lt;/p&gt;
+&lt;h3&gt;示例&lt;/h3&gt;
+&lt;p&gt;新建一个计数器类型并为其定义一个方法：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;type&lt;/span&gt; Count &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;c Count&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  c &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; c &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;c&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如上的方法与以下写法有同样的效果（但并不等价）：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;c Count&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/methods.png&quot; alt=&quot;Method&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;原理并不完全如上所示，但你可以像这样来理解&lt;/p&gt;
+&lt;h3&gt;值传递&lt;/h3&gt;
+&lt;p&gt;当 Incr 被调用时，Count 实例的值会被复制一份并传递给 Incr。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; c Count&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; c&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; c&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// output: 1 1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 align=&quot;center&quot;&gt;&lt;i&gt;&lt;/i&gt;c 的值并不会增加，因为 c 是通过值传递的方式传递给方法&lt;/i&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/value_receiver.png&quot; alt=&quot;Value receiver&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;指针传递（引用传递）&lt;/h3&gt;
+&lt;p&gt;想要改变计数器 c 的值，你需要给 Incr 方法传入 Count 类型指针——&lt;code class=&quot;language-text&quot;&gt;*Count&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;c &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;Count&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;c &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;c &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt;c&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; c Count
+c&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; c&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Incur&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;// output: 1 2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/pointer_receiver.png&quot; alt=&quot;pointer receiver&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/hGVJWPIFZG&quot; title=&quot;receiver&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;在我之前的一些文章中有更多的示例：看&lt;a href=&quot;https://blog.learngoprogramming.com/golang-const-type-enums-iota-bc4befd096d3#c320&quot;&gt;这里！&lt;/a&gt;看&lt;a href=&quot;https://blog.learngoprogramming.com/golang-funcs-params-named-result-values-types-pass-by-value-67f4374d9c0a#638f&quot;&gt;这里！&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;接口方法&lt;/h2&gt;
+&lt;p&gt;我们用&lt;strong&gt;接口方法&lt;/strong&gt;的方式来重建上面的程序。先创建一个叫做 Counter 的新接口：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;type&lt;/span&gt; Counter &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;下面的 onApiHit 函数能使用任何拥有 &lt;code class=&quot;language-text&quot;&gt;Incr() int&lt;/code&gt; 方法的类型：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;onApiHit&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;c Counter&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  c&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Incr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;我们即刻使用一下这个改造版的计数器——现在你可以使用一个名副其实的计数器接口了：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;dummyCounter &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Count&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;onApiHit&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;dummyCounter&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;// dummyCounter = 1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/interface_funcs.png&quot; alt=&quot;interface methods&quot;&gt;&lt;/p&gt;
+&lt;p&gt;我们在 Count 类型上定义了一个 &lt;code class=&quot;language-text&quot;&gt;Incr() int&lt;/code&gt; 方法，因此 &lt;code class=&quot;language-text&quot;&gt;onApiHit()&lt;/code&gt; 方法可以通过它来增长 counter —— 我将 dummyCounter 的指针传入了 onApiHit，否则这个计数器不会因而增长。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/w0oyZjmdMA&quot; title=&quot;interface method&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;接口方法与普通方法的区别在于接口方法更具伸缩性、可扩展性，并且它是松耦合的。你可以利用接口方法在不同的包之间进行各自所需的实现，而不用修改 onApiHit 或是是其他方法的代码&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;函数是一等公民&lt;/h2&gt;
+&lt;p&gt;一等公民意味着 Go 语言中函数也是一种值类型，可以像其他类型的值一样被存储或是传递。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/first-class_funcs.png&quot; alt=&quot;first-class funcs&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;函数可以作为一种值类型和其他的类型配合使用，反之亦然&lt;/p&gt;
+&lt;h3&gt;示例&lt;/h3&gt;
+&lt;p&gt;以下程序通过 Crunchers 切片将一个数值序列作为参数传递到一个叫 ”crunch“ 的函数中去。&lt;/p&gt;
+&lt;p&gt;声明一个”用户自定义函数类型“，它需要接收一个 int 类型的值来返回一个 int 类型的值。&lt;/p&gt;
+&lt;p&gt;这意味着任何使用这种类型的代码都可以接受一个以如下形式签名的函数：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;type&lt;/span&gt; Cruncher &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;声明一些 cruncher 类型的函数：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;mul&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Crunch 是一个&lt;a href=&quot;https://blog.learngoprogramming.com/golang-variadic-funcs-how-to-patterns-369408f19085&quot;&gt;可变参数函数&lt;/a&gt;，通过 Cruncher 类型的可变参数处理一系列的整型数：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;crunch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;nums &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; a &lt;span class=&quot;token operator&quot;&gt;...&lt;/span&gt;Cruncher&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;rnums &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;// 创建一个等价的切片&lt;/span&gt;
+  rnums &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;rnums&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; nums&lt;span class=&quot;token operator&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; f &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;range&lt;/span&gt; a &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; i&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;range&lt;/span&gt; rnums &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      rnums&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;声明一个具有一些初始值的整型切片，之后对它们进行处理：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;nums &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;crunch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;nums&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; mul&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; add&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sub&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;输出：&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;[101 103 105 107 109]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/hNSKZAo0p6&quot; title=&quot;first-class func&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;匿名函数&lt;/h2&gt;
+&lt;p&gt;匿名函数即没有名字的函数，它以&lt;a href=&quot;https://golang.org/ref/spec#Function_literals&quot;&gt;函数字面量&lt;/a&gt;的方式在行内进行声明。它在实现闭包、高阶函数、延时函数等特殊函数时有极大作用。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/Anonymous_funcs.png&quot; alt=&quot;annoymous funcs&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;函数签名&lt;/h3&gt;
+&lt;p&gt;命名函数：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;Bang&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;energy &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Duration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;匿名函数：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;energy &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Duration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;它们有相同的函数签名形式，所以它们可以互换着使用：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Duration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/-az-2qBr9T&quot; title=&quot;annoymous func&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;示例&lt;/h3&gt;
+&lt;p&gt;我们用匿名函数的方式重构一下上面的”函数是第一公民“单元中的 cruncher 程序。在 main 函数中声明几个匿名 cruncher 函数。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token function&quot;&gt;crunch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;nums&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+         &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+         &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;crunch 函数只期望接收到 Cruncher 类型的函数，并不关心它（它们）是命名函数还是匿名函数，因此以上代码可以正常工作。&lt;/p&gt;
+&lt;p&gt;为了提高可读性，在传入 crunch 之前你可以先将这些匿名函数赋值给变量。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;mul &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+add &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;100&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+sub &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;n &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; n &lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;crunch&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;nums&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; mul&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; add&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; sub&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/iqcumj5cka&quot; title=&quot;use annoymous func&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;高阶函数&lt;/h2&gt;
+&lt;p&gt;高阶函数可以接收或返回一个甚至多个函数。本质上来来讲，它用其他函数来完成工作。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/higher-order_funcs.png&quot; alt=&quot;hight-order funcs&quot;&gt;&lt;/p&gt;
+&lt;p&gt;下面闭包单元中的 split 函数就是一个高阶函数。它的返回结果是一个 tokenizer 类型的函数。&lt;/p&gt;
+&lt;h2&gt;闭包&lt;/h2&gt;
+&lt;p&gt;闭包可以记住其上下文环境中所有定义过的变量。闭包的一个好处就是随时可以在其捕获的环境下操作其中的变量——&lt;em&gt;小心内存泄漏！&lt;/em&gt;&lt;/p&gt;
+&lt;h3&gt;示例&lt;/h3&gt;
+&lt;p&gt;声明一个新的函数类型，它返回一个已分割的字符串的下一个单词：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;type&lt;/span&gt; tokenizer &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;token &lt;span class=&quot;token builtin&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; ok &lt;span class=&quot;token builtin&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;下面的 split 函数是一个&lt;strong&gt;高阶函数&lt;/strong&gt;，它根据指定的分割符来分割一个字符串，然后返回一个可以遍历这个被分割的字符串中所有单词的&lt;strong&gt;闭包&lt;/strong&gt;。&lt;em&gt;这个闭包可以使用 ”token“ 和 ”last“ 两个在其捕获的环境下定义的变量。&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/closure.png&quot; alt=&quot;cloure&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;小试牛刀：&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; sentence &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;The quick brown fox jumps over the lazy dog&quot;&lt;/span&gt;
+
+iter &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;sentence&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; ok &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;iter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;ok &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+  fmt&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;在这里，我们使用了 split 函数将一句话分割成了若干个单词，然后得到了一个&lt;em&gt;迭代器函数&lt;/em&gt;，并将它赋值给 iter 变量&lt;/li&gt;
+&lt;li&gt;然后，我开始了一个当 iter 函数返回 false 的时候才停止的无限循环&lt;/li&gt;
+&lt;li&gt;每次调用 iter 都能返回下一个单词&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;结果：&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;The
+quick
+brown
+fox
+jumps
+over
+the
+lazy
+dog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/AI1_5BkO1d&quot; title=&quot;closure&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;再次提示，这里面有更详细的描述哦~&lt;/p&gt;
+&lt;h2&gt;延时函数 （defer funcs）&lt;/h2&gt;
+&lt;p&gt;延时函数只在其父函数返回时被调用。多个延时函数会以栈的形式一个接一个被调用。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;👉&lt;/em&gt; &lt;strong&gt;&lt;em&gt;我在&lt;a href=&quot;https://blog.learngoprogramming.com/golang-defer-simplified-77d3b2b817ff&quot;&gt;另一篇文章&lt;/a&gt;中对延时函数有详细介绍&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/defer_funcs.png&quot; alt=&quot;defer func&quot;&gt;&lt;/p&gt;
+&lt;h2&gt;并发函数&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;go func()&lt;/code&gt; 会与其他 goroutines 并发执行。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;goroutine 是一种轻量级的线程机制，它能使你方便快捷的安排并发体系。其中，main 函数在 main-goroutine 中执行。&lt;/em&gt;&lt;/p&gt;
+&lt;h3&gt;示例&lt;/h3&gt;
+&lt;p&gt;这里，“start” 匿名函数通过 “go” 关键字进行调用，不会阻塞父函数的执行：&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;start &lt;span class=&quot;token operator&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Sleep&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Second&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  fmt&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;concurrent func: ends&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+fmt&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;main: continues...&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Sleep&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;*&lt;/span&gt; time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Second&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+fmt&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;main: ends&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;输出&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;main: continues...
+concurrent func: ends
+main: ends&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/concurrent_funcs.png&quot; alt=&quot;concurrent funs&quot;&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot;&gt;&lt;i&gt;如果 main 函数中没有睡眠等阻塞调用，那么，main 函数会终止，而不会等待并发函数执行完。&lt;/i&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;main: continues...
+main: ends&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://play.golang.org/p/UzbtrKxBna&quot; title=&quot;concurrent&quot;&gt;&lt;img src=&quot;https://raw.githubusercontent.com/studygolang/gctt-images/master/go-functions-overview/run_the_code.png&quot; alt=&quot;run the code&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;其他类型&lt;/h2&gt;
+&lt;h3&gt;递归函数&lt;/h3&gt;
+&lt;p&gt;你能在任意一门语言中使用递归函数，Go 语言中的递归函数实现与它们也没有本质上的区别。然而，你可别忘了每一次的函数调用通常都会创建一个&lt;a href=&quot;https://en.wikipedia.org/wiki/Call_stack#Functions_of_the_call_stack&quot;&gt;调用栈&lt;/a&gt;。但在 Go 中，栈是动态的，它们能根据相应函数的需要进行增减。如果你可以不使用递归解决手上的问题，那最好。&lt;/p&gt;
+&lt;h3&gt;黑洞函数&lt;/h3&gt;
+&lt;p&gt;黑洞函数能被多次定义，并且不能用通常的方式进行调用。它们在测试解析器的时候有时会非常有用：看&lt;a href=&quot;https://github.com/golang/tools/blob/master/imports/imports.go#L167&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;go&quot;&gt;&lt;pre class=&quot;language-go&quot;&gt;&lt;code class=&quot;language-go&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;内联函数&lt;/h3&gt;
+&lt;p&gt;Go 语言的链接器会将函数放置到可执行环境中，以便稍后在运行时调用它。与直接执行代码相比，有时调用函数是一项昂贵的操作。所以，编译器将函数的主体注入调用者函数中。&lt;/p&gt;
+&lt;p&gt;更多的相关资料请参阅：&lt;a href=&quot;https://github.com/golang/proposal/blob/master/design/19348-midstack-inlining.md&quot;&gt;这里&lt;/a&gt;、&lt;a href=&quot;http://www.agardner.me/golang/garbage/collection/gc/escape/analysis/2015/10/18/go-escape-analysis.html&quot;&gt;这里&lt;/a&gt;、&lt;a href=&quot;https://medium.com/@felipedutratine/does-golang-inline-functions-b41ee2d743fa&quot;&gt;这里&lt;/a&gt;和&lt;a href=&quot;https://github.com/golang/go/issues/17373&quot;&gt;这里&lt;/a&gt;。&lt;/p&gt;
+&lt;h3&gt;外部函数&lt;/h3&gt;
+&lt;p&gt;如果你省略掉函数体，仅仅进行函数声明，连接器会尝试在任何可能的地方找到这个外部函数。例如：Atan Func 在&lt;a href=&quot;https://github.com/golang/go/blob/dd8dc6f0595ffc2c4951c0ce8ff6b63228effd97/src/pkg/math/atan.go#L54&quot;&gt;&lt;em&gt;这里只进行了声明&lt;/em&gt;&lt;/a&gt;，而后在&lt;a href=&quot;https://github.com/golang/go/blob/dd8dc6f0595ffc2c4951c0ce8ff6b63228effd97/src/pkg/math/atan_386.s&quot;&gt;&lt;em&gt;这里进行了实现&lt;/em&gt;&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;via: &lt;a href=&quot;https://blog.learngoprogramming.com/go-functions-overview-anonymous-closures-higher-order-deferred-concurrent-6799008dde7b&quot;&gt;https://blog.learngoprogramming.com/go-functions-overview-anonymous-closures-higher-order-deferred-concurrent-6799008dde7b&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;作者：&lt;a href=&quot;https://blog.learngoprogramming.com/@inanc&quot;&gt;Inanc Gumus&lt;/a&gt;
+译者：&lt;a href=&quot;https://github.com/shockw4ver&quot;&gt;shockw4ver&lt;/a&gt;
+校对：&lt;a href=&quot;https://github.com/rxcai&quot;&gt;rxcai&lt;/a&gt;、&lt;a href=&quot;https://github.com/polaris1119&quot;&gt;polaris1119&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;本文由 &lt;a href=&quot;https://github.com/studygolang/GCTT&quot;&gt;GCTT&lt;/a&gt; 原创编译，&lt;a href=&quot;https://studygolang.com/&quot;&gt;Go 中文网&lt;/a&gt; 荣誉推出&lt;/p&gt;</content:encoded></item><item><title><![CDATA[译：在 Angular 中使用 Redux 来管理用户界面]]></title><description><![CDATA[在此感谢 Hristo Georgiev 先生的原文许可 PS：原文链接已失效，顾不再贴出 ​ 尽管各种用于构建 web 界面的先进技术在过去几年相继出现，但 DOM 和应用 UI 的管理仍然在很大程度上依赖 jQuery——一个已经有历尽 1…]]></description><link>http://www.samuel-zhang.com/Angular-Redux/</link><guid isPermaLink="false">http://www.samuel-zhang.com/Angular-Redux/</guid><pubDate>Fri, 01 May 2015 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;&lt;strong&gt;在此感谢 Hristo Georgiev 先生的原文许可&lt;/strong&gt;&lt;br&gt;
 &lt;strong&gt;PS：原文链接已失效，顾不再贴出&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;​ 尽管各种用于构建 web 界面的先进技术在过去几年相继出现，但 DOM 和应用 UI 的管理仍然在很大程度上依赖 jQuery——一个已经有历尽 10 年沧桑的代码库。目前的对它的应用已经和它初生之时所肩负的使命有所不同，尽管这不一定是一件不好的事情。但是从结果上来看，如今的开发者们对 jQuery 的应用方式已经产生了一些问题。随着大量低耦合甚至无耦合的组件、封装后的视图组件及其他各类元素集成在一起，前端应用变得越来越复杂。&lt;/p&gt;
 &lt;p&gt;​ 在这篇文章里，我们将探索一个基于 Redux 的解决方案，用于目前在 anguar2 构建的应用中极具挑战性的 UI 状态管理。接下来，我们会通过理论和一个实例来学习如何通过使用 reducer 的方法来处理应用 UI 状态的逻辑。&lt;/p&gt;
@@ -154,7 +385,7 @@ $ cd src/app/common/layout&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;界面状态初始化配置完成后，&lt;strong&gt;最后一步&lt;/strong&gt;就是添加 reducer，它会随着&lt;code class=&quot;language-text&quot;&gt;@ngrx/store&lt;/code&gt;提供的&lt;code class=&quot;language-text&quot;&gt;StoreModule&lt;/code&gt;变化在操作流的末端进行更新&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ touch src/app/common/index.ts&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;index.ts&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;/* 
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;typescript&quot;&gt;&lt;pre class=&quot;language-typescript&quot;&gt;&lt;code class=&quot;language-typescript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;/* 
   引入之前提到的用于创建高效选择器的工具 createSelector
  */&lt;/span&gt;
 
@@ -175,19 +406,19 @@ $ cd src/app/common/layout&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; combineReducers &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;@ngrx/store&apos;&lt;/span&gt;
 
 &lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppState&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
-  layout&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; fromLayout&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;State&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+  layout&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; fromLayout&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;State
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; reducers &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   layout&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; fromLayout&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;reducer&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
-&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; developmentReducer&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; Function &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;compose&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; developmentReducer&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;Function&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;compose&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
   &lt;span class=&quot;token function&quot;&gt;storeLogger&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
   combineReducers
 &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;reducers&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 
-&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;metaReducer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; any&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; action&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; any&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;metaReducer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;any&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; action&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;any&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;developementReducer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; action&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 
@@ -312,7 +543,7 @@ $ cd src/app/common/layout&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
   getLayoutState&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
   fromLayout&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getOpenedModalName
 &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;使用&lt;/h2&gt;
+&lt;h3&gt;使用&lt;/h3&gt;
 &lt;p&gt;我们创建一个简单的模态框来看一下它到底是如何运作的：&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ ng g component template-modal&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;template-modal.component.ts&lt;/strong&gt;&lt;/p&gt;
@@ -483,7 +714,7 @@ $ cd src/app/common/layout&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;在&lt;strong&gt;index.ts&lt;/strong&gt;中添加一些选择器来访问侧边栏的状态:&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;getLeftSidenavState&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; State&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; state&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;leftSidebarOpened
 &lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;getRightSidenavState&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;state&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; State&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; state&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;rightSidebarOpened&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2&gt;使用&lt;/h2&gt;
+&lt;h3&gt;使用&lt;/h3&gt;
 &lt;p&gt;除了将逻辑绑定在组件自身外，还可以通过结合结构型指令来关闭或开启对应的侧边栏。&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ ng g directive sidebar-watch&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;sidebar-watch.directive.ts&lt;/strong&gt;&lt;/p&gt;
@@ -721,7 +952,7 @@ layout.actions.ts&lt;/p&gt;
   fromLayout&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;getAlerts
 &lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;这就是全部了。现在 alert 是应用状态的一部分了。但如和使用呢？我们继续前进。&lt;/p&gt;
-&lt;h2&gt;使用&lt;/h2&gt;
+&lt;h3&gt;使用&lt;/h3&gt;
 &lt;p&gt;通过一些工具的使用，构建 alert 只需要非常小段的代码，因为 ng-bootstrap 已经提供了的实现。因此，我们只需要在任何有相应需求的地方复用这个组件：&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ touch src/app/alerts-list.component.ts&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;alerts.component.ts&lt;/strong&gt;&lt;/p&gt;
@@ -884,7 +1115,7 @@ layout.actions.ts&lt;/p&gt;
   &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;host&lt;/code&gt;将会监听窗口拉伸并调用&lt;code class=&quot;language-text&quot;&gt;onWindowResize&lt;/code&gt;方法，并传入事件对象。这个方法通过&lt;code class=&quot;language-text&quot;&gt;event.target&lt;/code&gt;获取新的窗口尺寸，然后将其作为参数来调用&lt;code class=&quot;language-text&quot;&gt;ResizeWindowAction&lt;/code&gt;以更新状态中的值。&lt;/p&gt;
-&lt;h2&gt;使用&lt;/h2&gt;
+&lt;h3&gt;使用&lt;/h3&gt;
 &lt;p&gt;最普遍的窗口尺寸需求就是响应式设计。比如，当屏幕像素宽小于 768px（iPad）的时候希望左侧边栏初始状态为收起。用 Redux 实现这个需求非常简单——只需要添加一个 if 语句进行对应操作：
 &lt;strong&gt;layout.reducers.ts&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;reducer&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
@@ -1133,7 +1364,7 @@ layout.actions.ts&lt;/p&gt;
 &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;AppModule&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;这个实现为分页功能提供了极大的便利——该应用的状态同时用于客户端的数据呈现和服务端的数据查询。&lt;/p&gt;
-&lt;h2&gt;使用&lt;/h2&gt;
+&lt;h3&gt;使用&lt;/h3&gt;
 &lt;p&gt;我们构建一个&lt;code class=&quot;language-text&quot;&gt;games-list&lt;/code&gt;组件来确认这个分页实现在开发可重用分页功能时的可用性。&lt;/p&gt;
 &lt;p&gt;之前提到的，分页的实现需要状态中有 4 个“片段”：&lt;/p&gt;
 &lt;ol&gt;

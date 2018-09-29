@@ -1,0 +1,150 @@
+/**
+ * Material prism theme by Mitch Jackson (http://mitchelljackson.co.uk)
+ * Inspired by Material Theme for Sublime Text
+ */
+
+ $color-code:               #CED3DF;
+ $color-code-background:    #263238;
+ $color-code-punctuation:   #89DDFF;
+ $color-code-tag:           #82AAFF;
+ $color-code-selector:      #82AAFF;
+ $color-code-keyword:       #C792EA;
+ $color-code-string:        #C3E88D;
+ $color-code-className:     #FFCB6B;
+ 
+ $base-code-tab-size:       4;
+ 
+ code[class*="language-"],
+ pre[class*="language-"] {
+     color: $color-code;
+     text-shadow: none;
+     font-weight: bold;
+     font-size: 15px;
+     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+     direction: ltr;
+     text-align: left;
+     white-space: pre;
+     word-spacing: normal;
+     word-break: normal;
+     word-wrap: normal;
+     line-height: 1.6em;
+ 
+     -moz-tab-size: $base-code-tab-size;
+     -o-tab-size: $base-code-tab-size;
+     tab-size: $base-code-tab-size;
+ 
+     -webkit-hyphens: none;
+     -moz-hyphens: none;
+     -ms-hyphens: none;
+     hyphens: none;
+ }
+ 
+ pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+ code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+     background: rgba(255,255,255, 0.2);
+ }
+ 
+ pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+ code[class*="language-"]::selection, code[class*="language-"] ::selection {
+     background: rgba(255,255,255, 0.2);
+ }
+ 
+ /* Code blocks */
+ pre[class*="language-"] {
+     padding: 1em;
+     margin: .5em 0;
+     overflow: auto;
+     border-radius: 5px;
+ }
+ 
+ :not(pre) > code[class*="language-"],
+ pre[class*="language-"] {
+     background: $color-code-background;
+ }
+ 
+ /* Inline code */
+ :not(pre) > code[class*="language-"] {
+     padding: .2em .4em;
+     border-radius: .3em;
+     white-space: normal;
+ }
+ 
+ .token.comment,
+ .token.prolog,
+ .token.doctype,
+ .token.cdata {
+     color: slategray;
+ }
+ 
+ .token.punctuation {
+     color: $color-code-punctuation;
+ }
+ 
+ .namespace {
+     opacity: .7;
+ }
+ 
+ .token.property,
+ .token.tag,
+ .token.boolean,
+ .token.number,
+ .token.constant,
+ .token.symbol,
+ .token.deleted {
+     color: $color-code-tag;
+ }
+ 
+ .token.selector,
+ .token.attr-name,
+ .token.char,
+ .token.inserted {
+     color: $color-code-selector;
+ }
+
+ .token.string {
+    color: $color-code-string;
+ }
+ 
+ .token.entity,
+ .token.url,
+ .language-css .token.string,
+ .style .token.string {
+     color: $color-code-selector;
+ }
+
+ .token.operator {
+     color: $color-code-keyword;
+ }
+ 
+ .token.atrule,
+ .token.attr-value,
+ .token.keyword {
+     color: $color-code-keyword;
+ }
+ 
+ .token.function {
+     color: $color-code-tag;
+ }
+ 
+ .token.regex,
+ .token.important,
+ .token.variable {
+     color: $color-code-selector;
+ }
+ 
+ .token.important,
+ .token.bold {
+     font-weight: bold;
+ }
+ .token.italic {
+     font-style: italic;
+ }
+ 
+ .token.entity {
+     cursor: help;
+ }
+
+ .token.builtin,
+ .token.class-name {
+     color: $color-code-className;
+ }
